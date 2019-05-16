@@ -2,6 +2,7 @@
 #define __Balloonride__MainScene__
 
 #include "cocos2d.h"
+#include "Balloon.h"
 USING_NS_CC;
 
 class MainScene : public Scene
@@ -16,9 +17,15 @@ public:
     CREATE_FUNC(MainScene);
 
 	void update(float delta) override;
-
 	void onEnter() override;
+	
+	void didAccelerate(Acceleration* acceleration, Event* event);
 private:
+	/**
+	* Player controlled character.
+	*/
+	Balloon* 				__pBalloon;
+
 	/**
 	* Displays current score.
 	*/

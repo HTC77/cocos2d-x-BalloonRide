@@ -13,7 +13,9 @@ bool MainScene::init()
     {
         return false;
     }
-	
+
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("balloons.plist");
+
 	auto visibleSize = Director::getInstance()->getVisibleSize();
     auto winSize = Director::getInstance()->getWinSize();
     auto origin = Director::getInstance()->getVisibleOrigin();
@@ -82,10 +84,27 @@ void MainScene::update(float delta)
 
 void MainScene::onEnter()
 {
+	// Remember to call the parent method first.
 	Scene::onEnter();
-	
+
+	Scene::onEnter();
+	__pBalloon = Balloon::create(this);
+
 	// This method will schedule updates with every frame. This will call update() callback method.
 	scheduleUpdate();
+
+	// Enable accelerometer
+	Device::setAccelerometerEnabled(true);
+	// Add Accelerometer listener
+	auto accelerateListener = EventListenerAcceleration::create(
+		CC_CALLBACK_2(MainScene::didAccelerate, this));
+	getEventDispatcher()->addEventListenerWithSceneGraphPriority(
+		accelerateListener, this);
+}
+
+void MainScene::didAccelerate(Acceleration* acceleration, Event* event)
+{
+	__pBalloon->setMove(acceleration->y, acceleration->x);
 }
 
 void MainScene::updateBgPosition(Sprite* pBg)
