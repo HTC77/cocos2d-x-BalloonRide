@@ -23,6 +23,8 @@
  ****************************************************************************/
 
 #include "HelloWorldScene.h"
+#include "MainScene.h"
+
 
 Scene* HelloWorld::createScene()
 {
@@ -134,6 +136,7 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 
 void HelloWorld::menuMainSceneCallback(Ref* pSender)
 {
+	Director::getInstance()->replaceScene(MainScene::createScene());
 }
 
 void HelloWorld::update(float delta)
