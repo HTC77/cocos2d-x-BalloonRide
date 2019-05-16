@@ -24,7 +24,6 @@
 
 #include "HelloWorldScene.h"
 
-
 Scene* HelloWorld::createScene()
 {
     return HelloWorld::create();
@@ -80,8 +79,41 @@ bool HelloWorld::init()
 
     /////////////////////////////
     // 3. add your codes below...
+	auto center = Vec2(origin.x + visibleSize.width / 2,
+		origin.y + visibleSize.height / 2);
+	// Start menu
+	auto startSceneItem = MenuItemFont::create("Start", CC_CALLBACK_1(HelloWorld::menuMainSceneCallback, this));
+	startSceneItem->setPosition(center);
+	menu->addChild(startSceneItem);
+	startSceneItem->setFontSizeObj(50);
 
+	// Background
 
+	// Add background to cache.
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile(
+		"background.plist", "bg_duplicate.png");
+	// Create the background sprites.
+	__pBg1 = Sprite::createWithSpriteFrameName("bg.png");
+	// Change the anchor point for convenience.
+	 __pBg1->setAnchorPoint(Vec2(0, 0));
+	__pBg1->setPosition(Vec2(0, 0));
+
+	 float bgWidth = __pBg1->getContentSize().width;
+	 __pBg2 = Sprite::createWithSpriteFrameName("bg.png");
+	 __pBg2->setAnchorPoint(Vec2(0, 0));
+	 // Position the second sprite directly after the first (from left to right).
+	 __pBg2->setPosition(Vec2(bgWidth - 1, 0));
+	
+	 __pBg3 = Sprite::createWithSpriteFrameName("bg.png");
+	 __pBg3->setAnchorPoint(Vec2(0, 0));
+	 // Position the third sprite directly after the second.
+	 __pBg3->setPosition(Vec2(2 * (bgWidth - 1), 0));
+
+	this->addChild(__pBg1, 0);
+	this->addChild(__pBg2, 0);
+	this->addChild(__pBg3, 0);
+
+	this->scheduleUpdate();
 
     return true;
 }
@@ -98,4 +130,38 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
     //_eventDispatcher->dispatchEvent(&customEndEvent);
 
 
+}
+
+void HelloWorld::menuMainSceneCallback(Ref* pSender)
+{
+}
+
+void HelloWorld::update(float delta)
+{
+	updateBgPosition(__pBg1);
+	updateBgPosition(__pBg2);
+	updateBgPosition(__pBg3);
+}
+
+void HelloWorld::updateBgPosition(Sprite* bg)
+{
+	if (bg)
+	{
+		Vec2 bgPos = bg->getPosition();
+		bgPos.x -= 1;
+		float bgWidth = bg->getContentSize().width;
+		if (bgPos.x < -bgWidth)
+		{
+			bgPos.x = 2 * bgWidth - 4;
+			// To remove a black line between third and first part of the background,
+			// after the first part has been moved to the right,
+			// the part needs to be detached from the layer and added again.
+			// This will move the first part on top of the others.
+			// The object needs to be retained as removeChild would delete the object.
+			bg->retain();
+			this->removeChild(bg, false);
+			this->addChild(bg);
+		};
+		bg->setPosition(bgPos);
+	}
 }

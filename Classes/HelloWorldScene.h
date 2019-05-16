@@ -40,6 +40,15 @@ public:
     
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
+
+	void menuMainSceneCallback(Ref* pSender);
+
+	void update(float delta) override;
+private:
+	Sprite* __pBg1;
+	Sprite* __pBg2;
+	Sprite* __pBg3;
+	void updateBgPosition(Sprite* pBg);
 };
 
 #endif // __HELLOWORLD_SCENE_H__
