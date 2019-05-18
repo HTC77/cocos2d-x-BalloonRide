@@ -3,6 +3,7 @@
 
 #include "cocos2d.h"
 #include "Balloon.h"
+#include "EnemyGenerator.h"
 USING_NS_CC;
 
 class MainScene : public Scene
@@ -25,6 +26,10 @@ private:
 	* Player controlled character.
 	*/
 	Balloon* 				__pBalloon;
+	/**
+	* Generates birds and planes.
+	*/
+	EnemyGenerator*			__pEnemyGenerator;
 
 	/**
 	* Displays current score.
@@ -52,6 +57,7 @@ private:
 	Sprite* 				__pBg3;
 	void updateBgPosition(cocos2d::CCSprite* pBg);
 	void updateBackground();
+	void updateScore();
 };
 
 #endif // __Balloonride__MainScene__

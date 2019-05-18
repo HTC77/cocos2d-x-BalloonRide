@@ -7,6 +7,8 @@ USING_NS_CC;
 class AnimatedObject : public Node
 {
 public:
+
+	void testme() {};
 	AnimatedObject();
 
 	/**
@@ -26,7 +28,14 @@ public:
 		float delay,
 		Scene* parent,
 		AnimTag spriteSheetTag);
-    
+
+	void init(
+		__String textureFileName,
+		Scene* parent,
+		AnimTag spriteTag);
+
+	void setPosition(Vec2 pos);
+	Size& getSize();
 protected:
 	/**
 	* Sprite sheet holding game object animation frames.
@@ -36,7 +45,7 @@ protected:
 	/**
 	* Array holding animation frames of game object sprite.
 	*/
-	Vector<SpriteFrame*> 			__pAnimationFrames;
+	Vector<SpriteFrame*> 		__pAnimationFrames;
 
 	/**
 	* Game object sprite.

@@ -36,7 +36,7 @@ bool MainScene::init()
 	this->addChild(menu, 1);
 
 	// Create the score label.
-	__pScoreLabel = Label::createWithTTF("Score: 0", "fonts/Marker Felt.ttf", 50);
+	__pScoreLabel = Label::createWithTTF("Score: 0", "fonts/Marker Felt.ttf", 30);
 	// Position the label on the center of the screen.
 	__pScoreLabel->setPosition(Vec2(winSize.width / 2, winSize.height - 20));
 	// Add the label as a child to this layer.
@@ -80,6 +80,7 @@ void MainScene::menuCloseCallback(cocos2d::Ref* pSender)
 void MainScene::update(float delta)
 {
 	updateBackground();
+	updateScore();
 }
 
 void MainScene::onEnter()
@@ -87,9 +88,10 @@ void MainScene::onEnter()
 	// Remember to call the parent method first.
 	Scene::onEnter();
 
-	Scene::onEnter();
 	__pBalloon = Balloon::create(this);
 
+	__pEnemyGenerator = EnemyGenerator::create(this);
+	
 	// This method will schedule updates with every frame. This will call update() callback method.
 	scheduleUpdate();
 
@@ -135,4 +137,16 @@ void MainScene::updateBackground()
 	updateBgPosition(__pBg1);
 	updateBgPosition(__pBg2);
 	updateBgPosition(__pBg3);
+}
+
+void MainScene::updateScore()
+{
+	__score += 1;
+	const int labelLength = 100;
+	char scoreLabelText[labelLength];
+	snprintf(scoreLabelText, labelLength, "Score: %d", __score);
+	if (__score % 10 == 0)
+	{
+		__pScoreLabel->setString(scoreLabelText);
+	}
 }

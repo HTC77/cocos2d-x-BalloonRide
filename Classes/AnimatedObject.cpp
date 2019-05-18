@@ -63,3 +63,45 @@ void AnimatedObject::init(std::string textureFileName,
 	__pSprite->runAction(__pAnimationAction);
 	__pSpriteSheet->addChild(__pSprite);
 }
+
+/**
+* This initializing method should be used if game object doesn't have animation frames.
+* It loads a new sprite sheet for the game object, if it isn't already loaded.
+* After that, it creates a new sprite and adds it as a child of the sprite sheet.
+*
+* @param textureFileName Name of a file containing game object textures.
+* @param parent			  Layer that will hold the sprite sheet.
+* @param spriteSheetTag  Tag describing the sprite sheet.
+*/
+void AnimatedObject::init(
+	__String textureFileName,
+	Scene* parent,
+	AnimTag spriteSheetTag)
+{
+	//Get the sprite sheet.
+	__pSpriteSheet = dynamic_cast<SpriteBatchNode*>(parent->getChildByTag(spriteSheetTag));
+	if (__pSpriteSheet == NULL)
+	{
+		//Create a new sprite sheet if it doesn't exit.
+		__pSpriteSheet = SpriteBatchNode::create(textureFileName.getCString());
+		__pSpriteSheet->setTag(spriteSheetTag);
+		parent->addChild(__pSpriteSheet, 1);
+	}
+
+	auto size = Director::getInstance()->getWinSize();
+
+	//Create game object sprite and add it to the sprite sheet.
+	__pSprite = Sprite::create(textureFileName.getCString());
+	__pSprite->setPosition(Vec2(size.width / 2, size.height / 2));
+	__pSpriteSheet->addChild(__pSprite);
+}
+
+void AnimatedObject::setPosition(Vec2 pos)
+{
+	__pSprite->setPosition(pos);
+}
+
+Size& AnimatedObject::getSize()
+{
+	return __pSprite->getBoundingBox().size;
+}
