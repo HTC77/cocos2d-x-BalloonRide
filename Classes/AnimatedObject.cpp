@@ -105,3 +105,18 @@ Size& AnimatedObject::getSize()
 {
 	return __pSprite->getBoundingBox().size;
 }
+
+Rect AnimatedObject::getRect()
+{
+	//The rectangle width is reduced by 15 because textures have blank space around the object.
+	return Rect(__pSprite->getPosition().x - __pSprite->getContentSize().width / 2 + 15,
+		__pSprite->getPosition().y - __pSprite->getContentSize().height / 2,
+		__pSprite->getContentSize().width - 15,
+		__pSprite->getContentSize().height);
+}
+
+void AnimatedObject::destroy()
+{
+	__pSprite->stopAllActions();
+	__pSpriteSheet->removeChild(__pSprite, true);
+}

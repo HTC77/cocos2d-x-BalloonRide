@@ -36,6 +36,9 @@ public:
 
 	void setPosition(Vec2 pos);
 	Size& getSize();
+	Rect getRect();
+	void destroy();
+
 protected:
 	/**
 	* Sprite sheet holding game object animation frames.

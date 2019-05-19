@@ -1,4 +1,6 @@
 #include "MainScene.h"
+#include "Enemy.h"
+#include "EndScene.h"
 
 Scene* MainScene::createScene()
 {
@@ -81,6 +83,7 @@ void MainScene::update(float delta)
 {
 	updateBackground();
 	updateScore();
+	updateEnemies(__pBalloon->getRect(), __pEnemyGenerator->getEnemies());
 }
 
 void MainScene::onEnter()
@@ -148,5 +151,57 @@ void MainScene::updateScore()
 	if (__score % 10 == 0)
 	{
 		__pScoreLabel->setString(scoreLabelText);
+	}
+}
+
+void MainScene::updateEnemies(Rect balloonRect, Vector<Node*> pEnemies)
+{
+	// When balloon hits a bird or plane, theEnd value is changed to true.
+	// Currently the balloon has only one "life".
+	bool theEnd = false;
+
+	// This array will hold enemy objects that are off screen or in collision with the balloon.
+	Vector<Node*> pEnemiesToRemove;
+	if (!pEnemies.empty())
+	{
+		for (auto enemy : pEnemies)
+		{
+			if (enemy)
+			{
+				auto rect =dynamic_cast<Enemy*>(enemy)->getRect();
+				bool collision = balloonRect.intersectsRect(rect);
+				if (((rect.getMinX() < 0) && (rect.getMaxX() < 0))
+					|| (collision))
+				{
+					// Enemy object is off screen or colliding with the balloon.
+					if (collision)
+					{
+						// Enemy object is colliding with the balloon.
+						theEnd = true;
+					}
+					pEnemiesToRemove.pushBack(enemy);
+				}
+			}
+		}
+
+		if (!pEnemiesToRemove.empty())
+		{
+			// Remove off screen or colliding objects.
+			__pEnemyGenerator->remove(pEnemiesToRemove);
+		}
+
+		// Clean the array.
+		pEnemiesToRemove.clear();
+	}
+
+	if (theEnd)
+	{
+		// Send the score to the endScene layer.
+		auto pScene = EndScene::createScene();
+		auto pEs = dynamic_cast<EndScene*>(pScene->getChildByTag(EndScene::endLayerTag));
+		pEs->setFinalScore(__score);
+
+		// Run endScene.
+		Director::getInstance()->replaceScene(pScene);
 	}
 }

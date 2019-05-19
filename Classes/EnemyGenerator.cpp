@@ -51,6 +51,16 @@ Vector<Node*> EnemyGenerator::getEnemies()
 	return __pEnemies;
 }
 
+void EnemyGenerator::remove(Vector<Node*> pEnemies)
+{
+	for (auto enemy : pEnemies)
+	{
+		auto pEnemy = dynamic_cast<Enemy*>(enemy);
+		pEnemy->destroy();
+	}
+	__pEnemies.eraseObjectsInArray(pEnemies);
+}
+
 void EnemyGenerator::generate(float deta)
 {
 	//create new enemy object

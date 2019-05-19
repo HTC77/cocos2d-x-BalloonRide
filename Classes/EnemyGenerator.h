@@ -15,6 +15,9 @@ public:
 	void onEnter() override;
 
 	Vector<Node*> getEnemies();
+
+	void remove(Vector<Node*> pEnemies);
+
 private:
 	/**
 	* Generated objects will be added as children of this layer.

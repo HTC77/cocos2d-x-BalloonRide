@@ -4,6 +4,7 @@
 #include "cocos2d.h"
 #include "Balloon.h"
 #include "EnemyGenerator.h"
+#include "Enemy.h"
 USING_NS_CC;
 
 class MainScene : public Scene
@@ -55,9 +56,10 @@ private:
 	* Third element of a moving background.
 	*/
 	Sprite* 				__pBg3;
-	void updateBgPosition(cocos2d::CCSprite* pBg);
+	void updateBgPosition(Sprite* pBg);
 	void updateBackground();
 	void updateScore();
+	void updateEnemies(Rect balloonRect, Vector<Node*> pEnemies);
 };
 
 #endif // __Balloonride__MainScene__
